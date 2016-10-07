@@ -3101,7 +3101,7 @@ If you call it from anywhere else, it sets the global copy of
   (interactive)
   (let ((default-buffer (sql-find-sqli-buffer)))
     (if (null default-buffer)
-        (sql-product-interactive)
+        (call-interactively 'sql-product-interactive)
       (let ((new-buffer (read-buffer "New SQLi buffer: " default-buffer t)))
         (if (null (sql-buffer-live-p new-buffer))
             (user-error "Buffer %s is not a working SQLi buffer" new-buffer)
