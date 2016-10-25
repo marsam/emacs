@@ -465,9 +465,9 @@ file.  Since that is a plaintext file, this could be dangerous."
      :list-all ("\\d+" . "\\dS+")
      :list-table ("\\d+ %s" . "\\dS+ %s")
      :completion-object sql-postgres-completion-object
-     :prompt-regexp "^[[:alnum:]_]*=[#>] "
+     :prompt-regexp "^[[:alnum:]_-]*=[#>] "
      :prompt-length 5
-     :prompt-cont-regexp "^[[:alnum:]_]*[-(][#>] "
+     :prompt-cont-regexp "^[[:alnum:]_-]*[-(][#>] "
      :input-filter sql-remove-tabs-filter
      :terminator ("\\(^\\s-*\\\\g$\\|;\\)" . "\\g"))
 
