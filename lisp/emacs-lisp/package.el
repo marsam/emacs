@@ -838,6 +838,7 @@ untar into a directory named DIR; otherwise, signal an error."
          (package--write-file-no-coding el-file)))
       (kind (error "Unknown package kind: %S" kind)))
     (package--make-autoloads-and-stuff pkg-desc pkg-dir)
+    (package--build-module pkg-desc pkg-dir)
     ;; Update package-alist.
     (let ((new-desc (package-load-descriptor pkg-dir)))
       (unless (equal (package-desc-full-name new-desc)
@@ -936,6 +937,17 @@ untar into a directory named DIR; otherwise, signal an error."
       (package-generate-description-file pkg-desc desc-file)))
   ;; FIXME: Create foo.info and dir file from foo.texi?
   )
+
+(defun package--build-module (pkg-desc pkg-dir)
+  "Build package module for PKG-DESC installed at PKG-DIR."
+  (when (assq :build (package-desc-extras pkg-desc))
+    (let ((default-directory (file-name-as-directory pkg-dir)))
+      (dolist (build-step (cdr (assq :build (package-desc-extras pkg-desc))))
+        (with-temp-buffer
+          (let ((exit-code (call-process shell-file-name nil t nil shell-command-switch build-step)))
+            (if (zerop exit-code)
+                (message "Built package %s step: '%S' " (package-desc-name pkg-desc) build-step)
+              (error "Build step '%S' exited with non-zero status %s: %s" build-step exit-code (buffer-string)))))))))
 
 ;;;; Compilation
 (defvar warning-minimum-level)
