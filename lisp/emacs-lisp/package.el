@@ -837,8 +837,8 @@ untar into a directory named DIR; otherwise, signal an error."
          (make-directory pkg-dir t)
          (package--write-file-no-coding el-file)))
       (kind (error "Unknown package kind: %S" kind)))
-    (package--make-autoloads-and-stuff pkg-desc pkg-dir)
     (package--build-module pkg-desc pkg-dir)
+    (package--make-autoloads-and-stuff pkg-desc pkg-dir)
     ;; Update package-alist.
     (let ((new-desc (package-load-descriptor pkg-dir)))
       (unless (equal (package-desc-full-name new-desc)
