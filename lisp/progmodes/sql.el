@@ -430,7 +430,8 @@ file.  Since that is a plaintext file, this could be dangerous."
      :sqli-comint-func sql-comint-mysql
      :list-all "SHOW TABLES;"
      :list-table "DESCRIBE %s;"
-     :prompt-regexp "^mysql> "
+     ;; (rx line-start (zero-or-more "\07") (or "MariaDB" "MySQL" "mysql") (zero-or-one " ") (zero-or-one "[" (one-or-more not-newline) "]") "> ")
+     :prompt-regexp "^*\\(?:\\(?:M\\(?:ariaDB\\|ySQL\\)\\|mysql\\)\\) ?\\(?:\\[.+]\\)?> "
      :prompt-length 6
      :prompt-cont-regexp "^    -> "
      :syntax-alist ((?# . "< b"))
@@ -955,7 +956,7 @@ Starts `sql-interactive-mode' after doing some setup."
   :type 'file
   :group 'SQL)
 
-(defcustom sql-mysql-options nil
+(defcustom sql-mysql-options '("--protocol=tcp" "--no-auto-rehash")
   "List of additional options for `sql-mysql-program'.
 The following list of options is reported to make things work
 on Windows: \"-C\" \"-t\" \"-f\" \"-n\"."
